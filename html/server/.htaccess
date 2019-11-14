@@ -1,0 +1,9 @@
+#
+
+# php_value max_input_vars 49000
+# php_value suhosin.post.max_vars 49000
+# php_value suhosin.request.max_vars 49000
+
+php_value allow_url_include On
+
+Header set Access-Control-Allow-Origin *
