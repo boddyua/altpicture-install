@@ -9,7 +9,7 @@
 
         if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
             // may also be using PUT, PATCH, HEAD etc
-            header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
+            header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
         if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
             header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
@@ -192,6 +192,15 @@
 			if(empty($_REQUEST['reset'])) sleep(5);
 			break;
 
+		case 'configure':
+			// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				$ret = array(
+					'type'=>$_REQUEST['q'],
+					'error'=> empty($GLOBALS['server']->password),
+					'data'=>'empty password',
+					);
+			break;
+
 
 		case 'login':
 			// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -304,7 +313,7 @@
 
 				$ret = array(
 					'type'=>$_REQUEST['q'],
-					'error'=> ($success===false ? 'save failed ' : ''),
+					'error'=> ($success===false ? 'load failed ' : ''),
 					'data'=> $_ds,
 					);
 			break;
@@ -371,16 +380,24 @@
 			// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 			$success = (!empty($_REQUEST['p']) && $GLOBALS['server']->password==$_REQUEST['p']);
 
-			if($success) writeLog("setupPasswordSave");
+            // first configure
+			$success = empty($GLOBALS['server']->password);
+
+			$data = 1;
+			if($success) {
+			    writeLog("setupPasswordSave");
+			    $data = 2;
+			}
 
 			if($success && !empty($_REQUEST['value'])) {
 				$p['password'] = $_REQUEST['value'];
 				$success = @file_put_contents($serverfile, json_encode($p) );
+				$data = 3;
 			}
 				$ret = array(
 					'type'=>$_REQUEST['q'],
 					'error'=> ($success===false ? 'save failed' : ''),
-					'data'=>'',
+					'data'=>$data,
 					);
 			break;
 

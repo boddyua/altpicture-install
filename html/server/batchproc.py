@@ -307,8 +307,8 @@ for jobfile in files:
     #### Move to orderdir
 
     try:
-        #os.remove(j['srcFile'])
-        os.rename(j['srcFile'], j['srcFile']+'~')
+        os.remove(j['srcFile'])
+        #os.rename(j['srcFile'], j['srcFile']+'~')
     except OSError:
         print "can't remove ", j['srcFile']
 

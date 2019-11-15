@@ -1,6 +1,7 @@
 #!/bin/bash
 
 DEVICE=cdrom
+FOLDER=/media
 
-umount /media/$DEVICE
-rm -d /media/$DEVICE
+umount /dev/$DEVICE
+rm -d $FOLDER/$DEVICE
