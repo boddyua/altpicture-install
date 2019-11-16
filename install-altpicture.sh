@@ -20,7 +20,7 @@ cp -R ./html/* $MAINDIR
 mkdir -p $MAINDIR/server/orders
 mkdir -p $MAINDIR/server/src-net
 mkdir -p $MAINDIR/server/src-bluetooth
-chown -R www-data:www-data $MAINDIR/server/
+chown -R www-data:www-data $MAINDIR/
 
 echo ... installing service ... ######################################################################
 NAME=altpicture
