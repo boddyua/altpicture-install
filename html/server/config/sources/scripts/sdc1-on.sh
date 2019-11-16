@@ -4,11 +4,15 @@ DEVICE=sdc1
 FOLDER=/media
 
 if [ -b /dev/$DEVICE ]; then
-	if ! mountpoint -q -- "$FOLDER/$DEVICE" ; then
-		mkdir -p $FOLDER/$DEVICE
-        	mount -t auto /dev/$DEVICE $FOLDER/$DEVICE
-	fi
+    if ! mountpoint -q -- "$FOLDER/$DEVICE" ; then
+        mkdir -p $FOLDER/$DEVICE
+        mount -t auto /dev/$DEVICE $FOLDER/$DEVICE
+    fi
 else
-    umount /dev/$DEVICE
-    rm -d $FOLDER/$DEVICE
+    if [ -d $FOLDER/$DEVICE ]; then
+        umount /dev/$DEVICE
+        rm -d $FOLDER/$DEVICE
+    fi
 fi
+
+
