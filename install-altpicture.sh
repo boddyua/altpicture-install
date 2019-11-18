@@ -111,4 +111,6 @@ fi
 cp ./build/samba/smb.conf.ini $CONFFILE
 service smbd restart
 
+service $NAME restart
+
 echo "  Altpicture insalled. " ######################################################################
