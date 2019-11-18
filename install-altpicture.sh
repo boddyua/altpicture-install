@@ -83,6 +83,10 @@ apt-get update && apt-get install -y \
     && pip install Pillow
 
 
+###################### logrotate
+mkdir -p /var/www/log
+cp ./build/nginx/altpicture.logrotate /etc/logrotate.d/altpicture
+
 ###################### nginx
 CONFFILE=/etc/nginx/sites-available/default
 if ! test -f "$CONFFILE.altpicture-bak"; then
@@ -98,10 +102,6 @@ if ! test -f "$CONFFILE.altpicture-bak"; then
 fi
 cp ./build/nginx/40-php.ini $CONFFILE
 service php7.2-fpm restart
-
-###################### logrotate
-mkdir -p /var/www/log
-cp ./build/nginx/altpicture.logrotate /etc/logrotate.d/altpicture
 
 ###################### samba
 CONFFILE=/etc/samba/smb.conf
