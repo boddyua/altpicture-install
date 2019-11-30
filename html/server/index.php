@@ -87,7 +87,19 @@
 			if($GLOBALS['setup']->removeArchiveOlder>13) {
 				$now = time();
 				foreach ($_ds as $d) {
-					if ($now - filemtime($d) >= 60 * 60 * 24 * $GLOBALS['setup']->removeArchiveOlder) { 
+				    $ordermtime = 0;
+                    $datfiles = glob($d.'/*.dat');
+                    if(!empty($datfiles[0])) {
+                        if($s = file_get_contents($datfiles[0])) {
+                            $tmp = json_decode($s);
+                            $ordermtime = strtotime($tmp->date);
+                        }
+                    }
+				    if($ordermtime<1) {
+				        $ordermtime = filemtime($d);
+				    }
+
+					if ($now - $ordermtime >= 60 * 60 * 24 * $GLOBALS['setup']->removeArchiveOlder) {
 						$folder = basename($d);
 						if(!empty($folder)) {
 							writeLog("removeArchiveOlder\t".$folder."\tdays:".$GLOBALS['setup']->removeArchiveOlder);
