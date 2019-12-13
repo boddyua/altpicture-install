@@ -28,6 +28,7 @@ chown -R www-data:www-data $MAINDIR/
 rm -r $UPDATEDIR
 
 cp ./build/upd-finish $MAINDIR/upd-finish
+cd $MAINDIR
 $MAINDIR/upd-finish
 rm -r $MAINDIR/upd-finish
 
