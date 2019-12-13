@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run as root".
+    exit 1
+fi
+
+
+### remove old source scripts of v.1.2.15
+
+rm -r server/config/sources/scripts/sdb1-on.sh
+rm -r server/config/sources/scripts/sdb1-off.sh
+rm -r server/config/sources/scripts/sdc1-on.sh
+rm -r server/config/sources/scripts/sdc1-off.sh
+
+#######################################3
