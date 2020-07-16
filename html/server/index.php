@@ -630,10 +630,10 @@
 
                                 $_width = $s[0];
                                 $_height = $s[1];
-// 								if($orientation == 6 || $orientation == 8) {
-//                                     $_width = $s[1];
-//                                     $_height = $s[0];
-// 								}
+								if($orientation == 6 || $orientation == 8) {
+                                    $_width = $s[1];
+                                    $_height = $s[0];
+								}
 
 
 								$filelist[] = array(
