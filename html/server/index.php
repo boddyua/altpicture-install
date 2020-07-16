@@ -831,7 +831,7 @@
 					// } else {
 						makeThumbResampled($source_file, $path_thumbs, $maxWidth);
 						makeThumbResampled($source_file, $path_dest, 0); // full
-						fixOrientation($path_dest);
+						fixOrientation($path_dest.$file);
 
 
 					// }
