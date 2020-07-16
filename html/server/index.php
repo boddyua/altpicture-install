@@ -614,8 +614,26 @@
 									// 3 - 180deg
 									// 6 - 90deg
 									// 8 - 270deg
+//                                                                 switch($exif['Orientation']) {
+//                                                                     case 8:
+//                                                                         $image = imagerotate($image,90,0);
+//                                                                         break;
+//                                                                     case 3:
+//                                                                         $image = imagerotate($image,180,0);
+//                                                                         break;
+//                                                                     case 6:
+//                                                                         $image = imagerotate($image,-90,0);
+//                                                                         break;
+//                                                                 }
 								}
 								$s = getimagesize ($path.$entry);
+
+                                $_width = $s[0];
+                                $_height = $s[1];
+								if($orientation == 6 || $orientation == 8) {
+                                    $_width = $s[1];
+                                    $_height = $s[0];
+								}
 
 
 								$filelist[] = array(
@@ -623,8 +641,8 @@
 									'name'=>encodeFSnational($entry),
 									'dir'=>encodeFSnational($dir),
 									'extension'=>$ext,
-									'width'=>$s[0],
-									'height'=>$s[1],
+									'width'=>$_width,
+									'height'=>$_height,
 									'orientation'=>$orientation,
 // TODO: читаю ВСЕ із носія, нахуя? а якщо там тисяча файлів? швидкості не добавляє ніяк
 									// 'src'=>makeThumb($_REQUEST['id'], $dir, $entry),
@@ -813,6 +831,9 @@
 					// } else {
 						makeThumbResampled($source_file, $path_thumbs, $maxWidth);
 						makeThumbResampled($source_file, $path_dest, 0); // full
+						fixOrientation($path_dest);
+
+
 					// }
 
 
@@ -1491,6 +1512,48 @@ function processImage($folder,$fileinfo,$image,$d,$count,$copyMode,$batch=false)
 	} else {
 		return false;
 	}
+}
+
+function fixOrientation($source) {
+
+    $dest_file_tmp = $source;
+
+    $exif = exif_read_data($source);
+    if($exif['Orientation']== 8 || $exif['Orientation']==3 || $exif['Orientation']==6) {
+
+            $extension = strtolower(pathinfo($source, PATHINFO_EXTENSION));
+			switch( $extension  ) {
+			    case 'gif':
+    			    $image = imagecreatefromgif($source);
+			    break;
+			    case 'jpg':
+			    case 'jpeg':
+    			    $image = imagecreatefromjpeg($source);
+			    break;
+			    case 'png':
+        		    $image = imagecreatefrompng($source);
+			    break;
+			}
+//          $image = imagecreatefromstring(file_get_contents($source));
+
+        if(!empty($exif['Orientation'])) {
+            switch($exif['Orientation']) {
+                case 8:
+                    $image = imagerotate($image,90,0);
+                    break;
+                case 3:
+                    $image = imagerotate($image,180,0);
+                    break;
+                case 6:
+                    $image = imagerotate($image,-90,0);
+                    break;
+            }
+        }
+//         $dest_file_tmp = pathinfo($source, PATHINFO_DIRNAME).'/fixed-'.pathinfo($source, PATHINFO_BASENAME);
+        imagejpeg($image,$dest_file_tmp,100);
+
+    }
+    return $dest_file_tmp;
 }
 
 
